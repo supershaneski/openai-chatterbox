@@ -1,11 +1,11 @@
 <h1 align="center">openai-chatterbox</h1>
-<h3 align="center">
+<p align="center">
 A sample Nuxt 3 application that listens to chatter in the background and transcribes it using the powerful OpenAI Whisper, an automatic speech recognition (ASR) system.
-</h3>
+</p>
 <br />
-<h3 align="center">
+<p align="center">
 「Nuxt 3アプリケーションのサンプルで、背景のチャタリングをリスニングし、強力なOpenAI Whisperという自動音声認識システムを使ってトランスクリプトします。」
-</h3>
+</p>
 
 ---
 
@@ -18,7 +18,6 @@ A sample Nuxt 3 application that listens to chatter in the background and transc
 # Motivation
 
 This is the [Nuxt.js](https://nuxt.com/docs/getting-started/introduction) version of the [openai-whisper](https://github.com/supershaneski/openai-whisper) project I built using [Next.js](https://nextjs.org/docs/getting-started), and is part of the series of projects to learn more about `Vue 3` and `Next 3`. I made some improvements in audio data capture and simplified the user interface.
-
 
 # Audio Capture
 
