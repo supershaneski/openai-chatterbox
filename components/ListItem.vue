@@ -6,14 +6,11 @@ import { getDisplayDateTime } from '../lib/utils'
 const props = defineProps({
     datetime: {
         Type: String,
-        default: '2023-01-30 13:40:01',
+        default: '',
     },
     texts: {
         Type: Array,
-        default: [
-            "[00:00:00 - 00:00:25] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ",
-            "[00:00:25 - 00:01:46] Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        ],
+        default: [],
     },
     disabled: {
         Type: Boolean,
@@ -53,7 +50,6 @@ const emit = defineEmits(['click'])
 .list-item {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 6px;
     background-color: #fff;
-    /*border: 1px solid #dedeff;*/
     border-radius: 5px;
     position: relative;
     margin: 0.4rem;
@@ -95,7 +91,6 @@ const emit = defineEmits(['click'])
     }
     .list-item {
         background-color: #222222;
-        /*border: 1px solid #655;*/
     }
 }
 </style>

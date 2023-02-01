@@ -36,8 +36,6 @@ export default defineEventHandler(async (event) => {
                 
                 let oldPath = files.file.filepath
                 
-                // it is probably not necessary to copy the file to the upload folder
-                // and just directly use the original file location
                 fs.copyFileSync(oldPath, newPath)
                 
                 resolve({
@@ -69,7 +67,6 @@ export default defineEventHandler(async (event) => {
     let filePath = data.file
 
     const outputDir = path.join("public", "upload") 
-    //const filename = `${outputDir}/${data.file}`
 
     let sCommand = `whisper './${filePath}' --language English --model tiny --output_dir '${outputDir}'`
     
@@ -103,7 +100,6 @@ export default defineEventHandler(async (event) => {
 
     if(data.status === "error" || data.out.length === 0) {
 
-        // delete file
         if(fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }

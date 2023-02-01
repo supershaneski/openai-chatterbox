@@ -14,8 +14,6 @@ const progress = ref(0)
 
 let timer = null
 
-///////////////////
-
 const isStarted = ref(false)
 const isReady = ref(false)
 const errorMessage = ref('')
@@ -41,14 +39,9 @@ const data = ref([])
 let createdDateTime = ''
 let dateTimeCreated = ''
 
-//console.log(store)
-
-/////////////////
 function startAudio() {
 
     let inc = audioRef.value.duration * 1000 / 100
-
-    console.log("[ duration ]", audioRef.value.duration, inc, (new Date()).toLocaleTimeString())
 
     timer = setInterval(() => {
 
@@ -72,13 +65,10 @@ function startAudio() {
 
 async function handleClick(id, url) {
 
-    console.log("[ play ]", id, url, (new Date()).toLocaleTimeString())
-
     if(selected.value === id && playState.value === 1) {
 
         await audioRef.value.pause()
 
-        //pause
         clearInterval(timer)
 
         playState.value = 0
@@ -87,7 +77,6 @@ async function handleClick(id, url) {
     }
 
     if(selected.value.length === 0) {
-        //start
         progress.value = 0
     } else {
         if(selected.value !== id) {
@@ -104,13 +93,16 @@ async function handleClick(id, url) {
         }
     }
 
+    console.log("AAAA", url)
+
     audioRef.value = new Audio()
 
-    audioRef.value.addEventListener('loadedmetadata', async () => {
-        
-        console.log("[ loadedmetadata ]", (new Date()).toLocaleTimeString())
-        console.log("time", audioRef.value.duration)
+    console.log(audioRef.value)
 
+    audioRef.value.addEventListener('loadedmetadata', async () => {
+
+        console.log("[fired event]")
+        
         if(audioRef.value.duration === Infinity) {
 
             selected.value = id
@@ -121,6 +113,8 @@ async function handleClick(id, url) {
         } else {
 
             try {
+
+                console.log("[duration 1]", audioRef.value.duration)
 
                 await audioRef.value.play()
 
@@ -148,14 +142,13 @@ async function getDuration() {
     audioRef.value.currentTime = 0
     audioRef.value.removeEventListener('timeupdate', getDuration)
 
-    console.log(audioRef.value.duration)
-
     try {
+
+        console.log("[duration 2]", audioRef.value.duration)
 
         await audioRef.value.play()
 
         playState.value = 1
-        //selected.value = id
 
         startAudio()
 
@@ -303,8 +296,6 @@ function handleData(e) {
 
 function handleStop() {
 
-    console.log("[ aduio file ]")
-
     dateTimeCreated = createdDateTime
 
     const blob = new Blob(chunks.value, {type: 'audio/webm;codecs=opus'})
@@ -389,27 +380,6 @@ onMounted(async () => {
 
     }
 
-    //abortController.value = new AbortController()
-
-    /*const rawData = localStorage.getItem('chatterbox-transcribed-data')
-    if(rawData) {
-
-        const tmpObj = JSON.parse(rawData)
-
-        console.log("[ mount ]")
-        console.log(tmpObj)
-
-    }
-    */
-
-    /*
-    data.value.push({
-                id: response.pid,
-                datetime: response.datetime,
-                texts: response.out,
-                url: response.url,
-            })*/
-
     const items = appStore.value.items
     if(items.length > 0) {
         data.value = items.map(item => {
@@ -426,19 +396,6 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
 
-    /*
-    try {
-        if(data.value.length > 0) {
-            const saveData = JSON.stringify({
-                items: data.value,
-            })
-            localStorage.setItem('chatterbox-transcribed-data', saveData)
-        }
-    } catch(err) {
-        console.log("save data", err)
-    }
-    */
-    
     try {
         abortController.value.abort()
         window.cancelAnimationFrame(animFrame.value)

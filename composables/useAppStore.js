@@ -49,7 +49,6 @@ export const useAppStore = () => {
                                 t2 = [stoken[1], stoken[2]].join(":")
                             }
 
-                            //str = '[' + txt.replace(/,/g, '.') + '] ';
                             str = t1 + " --> " + t2
                             str = '[' + str.replace(/,/g, '.') + '] ';
                             flag = true

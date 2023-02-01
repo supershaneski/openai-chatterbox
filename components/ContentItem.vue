@@ -5,13 +5,7 @@ const props = defineProps({
     }
 })
 
-//console.log("text", props.text)
-
-/*
-<span class="content-item-datetime">[00:00:00 - 00:00:25]</span> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-*/
-
-const testData = computed(() => {
+const contentData = computed(() => {
     let token = props.text.split("]")
     return {
         datetime: token[0] + "]",
@@ -23,7 +17,7 @@ const testData = computed(() => {
 
 <template>
     <div class="content-item">
-        <span class="content-item-datetime">{{ testData.datetime }}</span>&nbsp;{{ testData.textdata }}
+        <span class="content-item-datetime">{{ contentData.datetime }}</span>&nbsp;{{ contentData.textdata }}
     </div>
 </template>
 

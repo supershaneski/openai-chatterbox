@@ -49,7 +49,6 @@ onMounted(() => {
 
     const hasDarkPreference = window.matchMedia("(prefers-color-scheme: dark)").matches
     if (hasDarkPreference) {
-        //return "dark-theme";
         isDarkMode.value = true
     }
 
@@ -91,6 +90,7 @@ onMounted(() => {
 }
 .icon {
     z-index: 2;
+    cursor: pointer;
 }
 
 .v-enter-active,

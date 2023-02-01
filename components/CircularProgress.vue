@@ -76,7 +76,6 @@ onMounted(() => {
                 backgroundColor: props.lineColor,
             }" />
             <div class="display" :style="{
-                //backgroundColor: props.textBackColor,
                 left: `${props.lineWidth}px`,
                 top: `${props.lineWidth}px`,
                 width: `calc(100% - (2 * ${props.lineWidth}px))`,
@@ -121,15 +120,6 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
 }
-/*.text {
-    font-family: helvetica, arial, sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-.text span {
-    font-size: 0.7em;
-    font-weight: 400;
-}*/
 
 @media (prefers-color-scheme: dark) {
     .display {
