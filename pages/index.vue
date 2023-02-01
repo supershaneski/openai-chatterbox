@@ -3,7 +3,7 @@ import ListItem from '~~/components/ListItem.vue';
 import AnimatedBars from '~~/components/AnimatedBars.vue';
 
 const MAX_PAUSE = 2500
-const MIN_DECIBELS = -70 //-45
+const MIN_DECIBELS = -45
 const INTERVAL_TIME = 100
 
 const appStore = useAppStore()
@@ -93,16 +93,10 @@ async function handleClick(id, url) {
         }
     }
 
-    console.log("AAAA", url)
-
     audioRef.value = new Audio()
-
-    console.log(audioRef.value)
 
     audioRef.value.addEventListener('loadedmetadata', async () => {
 
-        console.log("[fired event]")
-        
         if(audioRef.value.duration === Infinity) {
 
             selected.value = id
@@ -113,8 +107,6 @@ async function handleClick(id, url) {
         } else {
 
             try {
-
-                console.log("[duration 1]", audioRef.value.duration)
 
                 await audioRef.value.play()
 
@@ -143,8 +135,6 @@ async function getDuration() {
     audioRef.value.removeEventListener('timeupdate', getDuration)
 
     try {
-
-        console.log("[duration 2]", audioRef.value.duration)
 
         await audioRef.value.play()
 
