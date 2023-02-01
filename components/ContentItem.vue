@@ -1,0 +1,46 @@
+<script setup>
+const props = defineProps({
+    text: {
+        Type: String,
+    }
+})
+
+//console.log("text", props.text)
+
+/*
+<span class="content-item-datetime">[00:00:00 - 00:00:25]</span> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+*/
+
+const testData = computed(() => {
+    let token = props.text.split("]")
+    return {
+        datetime: token[0] + "]",
+        textdata: token.length > 1 ? token[1].trim() : ""
+    }
+})
+
+</script>
+
+<template>
+    <div class="content-item">
+        <span class="content-item-datetime">{{ testData.datetime }}</span>&nbsp;{{ testData.textdata }}
+    </div>
+</template>
+
+<style scoped>
+.content-item {
+    position: relative;
+}
+.content-item-datetime {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+@media screen and (max-width: 400px) {
+    .content-item-datetime {
+        font-size: 0.7rem;
+        display: block;
+    }
+}
+</style>

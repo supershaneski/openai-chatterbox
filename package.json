@@ -1,0 +1,19 @@
+{
+  "name": "openai-chatterbox",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nuxt dev --hostname '0' --port=5000",
+    "build": "nuxt build",
+    "dev": "nuxt dev --hostname '0' --port=5000",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "^3.1.0"
+  },
+  "dependencies": {
+    "formidable": "^2.1.1"
+  }
+}
