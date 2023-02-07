@@ -31,11 +31,11 @@ By default it is set to `-45dB` (0dB is the loudest sound).
 Adjust the variable `MIN_DECIBELS` if you want to set it to lower or higher depending on your needs.
 
 In normal human conversation, it is said that we tend to pause, on average, around 2 seconds between each sentences. Keeping this in mind, if sound is not detected for more than 2 seconds, recording will stop and the audio data will be sent to the backend for transcribing.
-You can change this by editing the value of `MAX_PAUSE`, by default set to `2500ms`.
+You can change this by editing the value of `MAX_PAUSE`, by default set to `3000ms`.
 
 Press the `Stop` button once again to stop recording.
-This will also stop transcribing the audio data currently not yet finished.
-If you do not want this behavior, edit the line of codes for `AbortController`.
+However, all pending data being transcribed will not be aborted.
+You can see the red dot indicator at the upper right corner light up when there is still pending data.
 
 Not all uploaded audio data will contain voice data.
 Only audio data that are successfully transcribed will be shown in the list.
