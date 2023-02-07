@@ -13,3 +13,7 @@ _bin
 *.bu.js
 .DS_Store
 *.pem
+*.m4a
+*.m4a.srt
+*.m4a.txt
+*.m4a.vtt

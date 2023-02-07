@@ -126,7 +126,7 @@ onMounted(() => {
         background-color: #222222;
     }
     .inner {
-        background-color: #fff;
+        background-color: #999;
     }
 }
 </style>

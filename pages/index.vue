@@ -1,8 +1,9 @@
 <script setup>
 import ListItem from '~~/components/ListItem.vue';
 import AnimatedBars from '~~/components/AnimatedBars.vue';
+import StartButton from '~~/components/StartButton.vue';
 
-const MAX_PAUSE = 2500
+const MAX_PAUSE = 3000
 const MIN_DECIBELS = -45
 const INTERVAL_TIME = 100
 
@@ -33,6 +34,8 @@ const countTimer = ref(null)
 const abortController = ref(null)
 
 const audioRef = ref(null)
+
+const dataCount = ref(0)
 
 const data = ref([])
 
@@ -121,8 +124,6 @@ async function handleClick(id, url) {
 
         }
 
-        
-
     })
 
     audioRef.value.src = url
@@ -171,12 +172,9 @@ function handleStart() {
 
         isRecording.value = false
         startCountdown.value = false
-        abortController.value.abort()
 
     } else {
-
-        abortController.value = new AbortController()
-
+        
         isStarted.value = true
 
     }
@@ -261,7 +259,7 @@ function checkAudioLevel(stream) {
                             isRecording.value = false
 
                             mediaRec.value.stop()
-
+                            
                         }
                     }
 
@@ -297,6 +295,8 @@ function handleStop() {
 
 async function uploadFile(file) {
 
+    dataCount.value++
+
     let formData = new FormData()
     formData.append("file", file)
     formData.append("datetime", dateTimeCreated)
@@ -312,6 +312,9 @@ async function uploadFile(file) {
             signal: abortController.value.signal,
         })
 
+        dataCount.value--
+        if(dataCount.value < 0) dataCount.value = 0
+
         if(response.status !== "error") {
 
             data.value.push({
@@ -324,6 +327,8 @@ async function uploadFile(file) {
     
     } catch(err) {
         console.log(err)
+
+        dataCount.value = 0
     }
 
 }
@@ -370,6 +375,8 @@ onMounted(async () => {
 
     }
 
+    abortController.value = new AbortController()
+
     const items = appStore.value.items
     if(items.length > 0) {
         data.value = items.map(item => {
@@ -402,8 +409,11 @@ onBeforeUnmount(() => {
         <div class="header">
             <h1 class="title">Chatterbox</h1>
             <div class="record-status-panel">
-                <div v-if="isReady" class="record-status">
-                    <AnimatedBars :start="isRecording" />
+                <div v-if="isReady" class="record-panel">
+                    <div class="record-status">
+                        <AnimatedBars :start="isRecording" />
+                    </div>
+                    <div class="record-indicator" :class="{blink: dataCount }">&#9679;</div>
                 </div>
                 <span v-else class="error">{{ errorMessage }}</span>
             </div>
@@ -425,7 +435,7 @@ onBeforeUnmount(() => {
             </div>
         </div>
         <div class="action-panel">
-            <button v-if="isReady" @click="handleStart" class="start-button">{{ isStarted ? 'Stop' : 'Start' }}</button>
+            <StartButton @click="handleStart" :disabled="!isReady" :isStarted="isStarted" />
         </div>
     </div>
 </template>
@@ -456,14 +466,35 @@ onBeforeUnmount(() => {
     display: flex;
     justify-content: flex-end;
 }
-.error {
-    font-size: 0.7rem;
-    color: #ff6767;
+.record-panel {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .record-status {
     position: relative;
     width: 50px;
     height: 20px;
+}
+.record-indicator {
+    position: relative;
+    font-size: 0.5rem;
+    color: #e6e6e6;
+    margin-left: 0.5rem;
+}
+.blink {
+    color: #f66;
+    animation: blinkAni 0.9s infinite;
+}
+@keyframes blinkAni {
+    from { color: #ff6; }
+    to { color: #f66; }
+}
+.error {
+    font-size: 0.7rem;
+    color: #ff6767;
+    padding-top: 5px;
 }
 .title {
     font-size: 1.1rem;
@@ -506,33 +537,13 @@ onBeforeUnmount(() => {
     z-index: 10;
     box-sizing: border-box;
 }
-.start-button {
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-width: 0;
-    border-radius: 50%;
-    background-color: #ff676766;
-    /*background-image: radial-gradient(#ff808099 40%, #ff4d4d99 90%);*/
-    position: relative;
-    width: 100px;
-    height: 100px;
-    font-size: 1rem;
-    color: #fffa;
-    outline: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.start-button:hover {
-    background-color: #ff6767cc;
-    color: #fffe;
-}
-.start-button:active {
-    text-shadow: 0px 0px 8px yellow;
-    transform: translateY(3px);
-}
 
 @media (prefers-color-scheme: dark) {
     .list, .list-empty {
         background-color: #333333;
+    }
+    .record-indicator {
+        color: #333;
     }
 }
 

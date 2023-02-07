@@ -23,21 +23,7 @@ const emit = defineEmits(['click'])
 const isDarkMode = ref(true)
 
 const buttonColor = computed(() => {
-
-    let hasDarkPreference = false
-
-    if(process.client) {
-
-        try {
-            hasDarkPreference = window.matchMedia("(prefers-color-scheme: dark)").matches
-        } catch(err) {
-            console.log(err)
-        }
-
-    }
-    
-    const baseColor = hasDarkPreference ? '#ffffff' : '#999'
-    return props.progress === 0 ? baseColor : '#00DC82'
+    return props.progress === 0 ? '#999' : '#00DC82'
 })
 
 function handleClick() {

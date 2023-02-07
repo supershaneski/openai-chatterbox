@@ -42,7 +42,7 @@ watch(isStarto, (value) => {
     box-sizing: border-box;
 }
 .bar-item {
-    background-color: #9999; /*#FFD167;*/ /*#FFA967;*/ /*hsla(160, 100%, 37%, 1);*/
+    background-color: #00DC8299; /* #9999 #FFD167;*/ /*#FFA967;*/ /*hsla(160, 100%, 37%, 1);*/
     border-radius: 1px;
     position: relative;
     width: calc((100% - 9px)/8);

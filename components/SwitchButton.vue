@@ -30,8 +30,6 @@ watch(toggle, (value) => {
 .switch {
   position: relative;
   display: inline-block;
-  /*width: 60px;
-  height: 34px;*/
   width: 48px;
   height: 28px;
 }
@@ -57,10 +55,6 @@ watch(toggle, (value) => {
 .slider:before {
   position: absolute;
   content: "";
-  /*height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;*/
   height: 20px;
   width: 20px;
   left: 4px;
@@ -71,10 +65,10 @@ watch(toggle, (value) => {
 }
 
 .enabled {
-  background-color: #999;/*#ccc*/
+  background-color: #999;
 }
 .enabled:before {
-  background-color: #eee;/*#fff*/
+  background-color: #eee;
 }
 
 input:checked + .slider {
@@ -86,9 +80,6 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  /*-webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);*/
   -webkit-transform: translateX(20px);
   -ms-transform: translateX(20px);
   transform: translateX(20px);

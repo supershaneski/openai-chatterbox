@@ -56,7 +56,6 @@ onMounted(() => {
 
 <style scoped>
 .type-writer-text {
-    /*background-color: #f5f5f566;*/
     position: relative;
 }
 </style>
