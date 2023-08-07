@@ -7,6 +7,8 @@ A sample Nuxt 3 application that listens to chatter in the background and transc
 「Nuxt 3アプリケーションのサンプルで、背景のチャタリングをリスニングし、強力なOpenAI Whisperという自動音声認識システムを使ってトランスクリプトします。」
 </p>
 
+> **Update:** I added support to use [OpenAI Whisper API](https://platform.openai.com/docs/guides/speech-to-text) instead of the python module. See [Whisper API](#whisper-api) section for more details.
+
 ---
 
 <p align="center">
@@ -60,6 +62,51 @@ The app do not actually need these. However, it seems there is no option to prev
 Anyway, you might be interested in other configuration options using `Whisper` so please check `whisper --help`.
 
 
+## Whisper API
+
+I updated the code so that the user can choose to use `Whisper API` if they want instead of the python module.
+
+Just set `USE_WHISPER_API` to `true` in the `.env` file to start using the [Whisper API](https://platform.openai.com/docs/guides/speech-to-text). You will need a working `API Key` to use this API. Visit the [OpenAI website](https://platform.openai.com/) for more details.
+
+We will be using [OpenAI Node.JS library](https://github.com/openai/openai-node) to facilitate access to OpenAI APIs.
+
+```javascript
+import { Configuration, OpenAIApi } from "openai"
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+})
+
+const openai = new OpenAIApi(configuration)
+
+...
+
+try {
+
+  const file = fs.createReadStream(filePath)
+  const model = 'whisper-1'
+  const prompt = ''
+  const response_format = 'srt' // vtt
+  const temperature = 0
+  const language = 'en'
+
+  const response = await openai.createTranscription(
+    file,
+    model,
+    prompt,
+    response_format,
+    temperature,
+    language
+  )
+
+  console.log(response.data)
+
+} catch(error) {
+  console.log(error)
+}
+
+```
+
 # Nuxt.js/Vue.js
 
 Currently, I am using the basic `fetch` to send audio data to the API endpoint and it can cause blocking. I am planning to change it and use `useLazyFetch` instead later on to see if there is any improvement.
@@ -104,6 +151,13 @@ $ git clone https://github.com/supershaneski/openai-chatterbox.git myproject
 $ cd myproject
 
 $ npm install
+```
+
+Create a `.env` file in the root directory and copy the contents of `.env.example` and replace the value of `OPENAI_API_KEY` with your own, if you have, and set the value of `USE_WHISPER_API` to true or false, depending if you want to use whisper API or the installed python module.
+
+```sh
+OPENAI_API_KEY=PUT_YOUR_OPENAI_API_KEY
+USE_WHISPER_API=true
 ```
 
 To run the app
