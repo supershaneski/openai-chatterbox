@@ -3,8 +3,8 @@ import ListItem from '~~/components/ListItem.vue';
 import AnimatedBars from '~~/components/AnimatedBars.vue';
 import StartButton from '~~/components/StartButton.vue';
 
-const MAX_PAUSE = 3000
-const MIN_DECIBELS = -45
+const MAX_PAUSE = 5000 //3000
+const MIN_DECIBELS = -60 //-45
 const INTERVAL_TIME = 100
 
 const appStore = useAppStore()
@@ -155,7 +155,7 @@ function setEnabledState(id) {
 }
 
 function handleStart() {
-
+    
     if(isStarted.value) {
 
         isStarted.value = false
@@ -204,6 +204,7 @@ function checkAudioLevel(stream) {
     const audioContext = new AudioContext()
     const audioStreamSource = audioContext.createMediaStreamSource(stream)
     const analyser = audioContext.createAnalyser()
+    analyser.maxDecibels = -10
     analyser.minDecibels = MIN_DECIBELS
     audioStreamSource.connect(analyser)
 
@@ -326,16 +327,20 @@ async function uploadFile(file) {
         }
     
     } catch(err) {
+
         console.log(err)
 
         dataCount.value = 0
+
     }
 
 }
 
 const sortedData = computed(() => data.value.sort((a, b) => {
-    if(a.datetime > b.datetime) return -1
-    if(a.datetime < b.datetime) return 1
+    const date1 = (new Date(a.datetime)).toISOString()
+    const date2 = (new Date(b.datetime)).toISOString()
+    if(date1 > date2) return -1
+    if(date1 < date2) return 1
     return 0
 }))
 
@@ -378,7 +383,9 @@ onMounted(async () => {
     abortController.value = new AbortController()
 
     const items = appStore.value.items
+
     if(items.length > 0) {
+        
         data.value = items.map(item => {
             return {
                 id: item.pid,
@@ -387,6 +394,7 @@ onMounted(async () => {
                 url: item.url,
             }
         })
+
     }
     
 })

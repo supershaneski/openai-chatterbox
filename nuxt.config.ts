@@ -13,6 +13,8 @@ export default defineNuxtConfig({
     },
     //modules: ["formidable"],
     runtimeConfig: {
+        openaiApiKey: '',
+        useWhisperApi: '',
         public: {
             appTitle: 'Chatterbox'
         }

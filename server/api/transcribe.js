@@ -2,7 +2,15 @@ import formidable from "formidable"
 import { exec } from 'child_process'
 import fs from "fs"
 import path from "path"
-import { formatData, getSimpleId } from "../../lib/utils"
+import { Configuration, OpenAIApi } from "openai"
+
+import { formatData, formatData2, getSimpleId } from "../../lib/utils"
+
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+})
+
+const openai = new OpenAIApi(configuration)
 
 export default defineEventHandler(async (event) => {
 
@@ -63,40 +71,112 @@ export default defineEventHandler(async (event) => {
         }
     }
 
+    // begin trap here
+    const forceFlag = false
+    if(forceFlag) {
+        
+        //console.log('openai-api-key-1', config.openaiApiKey, process.env.OPENAI_API_KEY)
+        console.log('openai-api-key-3', process.env.OPENAI_API_KEY, process.env.USE_WHISPER_API)
+        console.log('audio-file', data.file, data.url)
+        
+        return {
+            status: "error"
+        }
+
+    }
+    // end trap here
+
+    const useWhisperApi = (process.env.USE_WHISPER_API === 'true')
+
     let fileUrl = data.url
     let filePath = data.file
 
-    const outputDir = path.join("public", "upload") 
+    if(useWhisperApi) {
 
-    let sCommand = `whisper './${filePath}' --language English --model tiny --output_dir '${outputDir}'`
+        try {
+
+            const file = fs.createReadStream(filePath)
+            const model = 'whisper-1'
+            const prompt = ''
+            const response_format = 'srt' // vtt
+            const temperature = 0
+            const language = 'en'
     
-    data = await new Promise((resolve, reject) => {
+            const response = await openai.createTranscription(
+                file,
+                model,
+                prompt,
+                response_format,
+                temperature,
+                language,
+            )
 
-        exec(sCommand, (error, stdout, stderr) => {
-            
-            if (error) {
+            let text = response?.data
+            if(text) {
                 
-                resolve({
-                    status: 'error',
-                    message: "Failed to transcribe [1]",
-                })
-
-            } else {
-
-                resolve({
-                    status: 'ok',
-                    error: stderr,
-                    pid: getSimpleId(),
-                    out: formatData(stdout),
-                    url: fileUrl,
-                    datetime: dateTimeCreated,
-                })
+                try {
+                    fs.writeFileSync(`${filePath}.srt`, text)
+                } catch (err) {
+                    console.error(err)
+                }
 
             }
+
+            data = text ? {
+                status: 'ok',
+                pid: getSimpleId(),
+                out: formatData2(text),
+                url: fileUrl,
+                datetime: dateTimeCreated,
+            } : {
+                status: 'error'
+            }
             
+        } catch(error) {
+            
+            console.log(error)
+            
+            data = {
+                status: 'error'
+            }
+
+        }
+
+    } else {
+
+        const outputDir = path.join("public", "upload")
+
+        let sCommand = `whisper './${filePath}' --language English --model tiny --output_dir '${outputDir}'`
+        
+        data = await new Promise((resolve, reject) => {
+
+            exec(sCommand, (error, stdout, stderr) => {
+                
+                if (error) {
+                    
+                    resolve({
+                        status: 'error',
+                        message: "Failed to transcribe [1]",
+                    })
+
+                } else {
+
+                    resolve({
+                        status: 'ok',
+                        error: stderr,
+                        pid: getSimpleId(),
+                        out: formatData(stdout),
+                        url: fileUrl,
+                        datetime: dateTimeCreated,
+                    })
+
+                }
+                
+            })
+
         })
 
-    })
+    }
 
     if(data.status === "error" || data.out.length === 0) {
 
